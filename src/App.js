@@ -43,10 +43,12 @@ function App() {
   );
   return (
     <>
-      <Header />
-      <NewFactForm />
+      <Header showForm={showForm} setShowForm={setShowForm} />
+
+      {showForm ? <NewFactForm setFacts={setFacts} setShowForm={setShowForm} /> : null}
+
       <main className='main'>
-        <CategoryFilter />
+        <CategoryFilter setCurrentCategory={setCurrentCategory} />
         {isLoading ? (<Loader />) :
           (<FactList facts={facts} setFacts={setFacts} />)}
       </main>
@@ -82,14 +84,14 @@ function Fact({ fact, setFacts }) {
   async function handleVote(columnName) {
     setIsUpdating(true);
     const { data: updatedFact, error } = await supabase
-      .from('facts')
+      .from('data')
       .update({ [columnName]: fact[columnName] + 1 })
       .eq('id', fact.id)
       .select();
     setIsUpdating(false);
 
     if (!error)
-      setFacts((facts) => facts.map((k) => (k.id === facts.id ? updatedFact[0] : k)));
+      setFacts((facts) => facts.map((k) => (k.id === fact.id ? updatedFact[0] : k)));
   }
 
   return (
@@ -97,6 +99,7 @@ function Fact({ fact, setFacts }) {
       <p>
         {isDisputed ? <span className='disputed'>[⛔️ DISPUTED]</span> : null}
         {fact.Contains}
+
         <a className='source' href={fact.source} target='_blank'>
           (Source)
         </a>
@@ -134,7 +137,7 @@ function Loader() {
   return <p className="message">Loading...</p>;
 }
 
-function Header() {
+function Header({ showForm, setShowForm }) {
   return (<header className="header">
     <div className="logo">
       <img
@@ -146,7 +149,7 @@ function Header() {
       <h1>Today I Learned</h1>
     </div>
 
-    <button className="btn btn-large">Share a fact</button>
+    <button className="btn btn-large" onClick={() => setShowForm((show) => !show)}>{showForm ? 'close' : 'share a fact'}</button>
   </header>);
 }
 
@@ -182,24 +185,40 @@ function isValidHttpUrl(string) {
   return url.protocol === 'http:' || url.protocol === 'https:';
 }
 
-function NewFactForm() {
+function NewFactForm(setFacts, setShowForm) {
   const [text, setText] = useState('');
   const [source, setSource] = useState('');
   const [category, setCategory] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const textL = text.length;
 
-  // async function handleSubmit(k) {
-  //   k.preventDefault();
-  //   if (text && isValidHttpUrl(source) && category && textL <= 200) {
-  //     setIsUploading(true);
-  //     const {
+  async function handleSubmit(k) {
+    k.preventDefault();
+    console.log(text, source, category);
+    if (text && isValidHttpUrl(source) && category && textL <= 200) {
+      setIsUploading(true);
+      const { data: newFact, error } = await supabase
+        .from('data')
+        .insert([{ Contains: text, source, category, votesInteresting: 0, votesMindblowing: 0, votesFalse: 0 }])
+        .select();
+      setIsUploading(false);
 
-  //     }
-  //   }
-  // }
+      if (!error) {
+        setFacts((fact) => [newFact[0], ...fact])
+        console.log("data in")
+      }
+      else alert('Something went wrong! Please try again. 😞')
+
+
+      setText('');
+      setSource('');
+      setCategory('');
+
+      setShowForm(false);
+    }
+  }
   return (
-    <form className="fact-form" >
+    <form className="fact-form" onSubmit={handleSubmit} >
       <input type="text" placeholder="Share a fact with the world..."
         value={text}
         onChange={(t) => setText(t.target.value)}
@@ -220,7 +239,7 @@ function NewFactForm() {
         {CATEGORIES.map((cat) => (<option key={cat.name} value={cat.name}> {cat.name.toUpperCase()}</option>))}
 
       </select>
-      <button className="btn btn-large">Post</button>
+      <button className="btn btn-large" disabled={isUploading}>Post</button>
     </form>
   )
 }

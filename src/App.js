@@ -48,11 +48,10 @@ function App() {
       {showForm ? <NewFactForm setFacts={setFacts} setShowForm={setShowForm} /> : null}
 
       <main className='main'>
-        <CategoryFilter setCurrentCategory={setCurrentCategory} />
+        <CategoryFilter setCurrentCategory={setCurrentCategory}  />
         {isLoading ? (<Loader />) :
-          (<FactList facts={facts} setFacts={setFacts} />)}
+          (<FactList facts={facts} setFacts={setFacts}  />)}
       </main>
-
     </>
   );
 }
@@ -138,7 +137,7 @@ function Loader() {
 }
 
 function Header({ showForm, setShowForm }) {
-  return (<header className="header">
+  return (<header className="header" >
     <div className="logo">
       <img
         src="logo.png"
@@ -158,11 +157,11 @@ function CategoryFilter({ setCurrentCategory }) {
     <aside >
       <ul>
         <li className="category">
-          <button className="btn btn-all-categories" onClick={() => setCurrentCategory('all')}>All</button>
+          <button className="btn btn-all-categories " onClick={() => setCurrentCategory('all')}>All</button>
         </li>
 
         {CATEGORIES.map((e) => (
-          <li key={e.name} className="category">
+          <li key={e.name} className="category ">
             <button className='btn btn-category'
               style={{ backgroundColor: e.color }}
               onClick={() => setCurrentCategory(e.name)}>
@@ -205,7 +204,7 @@ function NewFactForm({ setFacts, setShowForm }) {
 
       if (!error) {
         setFacts((fact) => [newFact[0], ...fact])
-        console.log("data in")
+          console.log('Fact added successfully! 🎉');
       }
       else alert('Something went wrong! Please try again. 😞')
 
@@ -243,5 +242,7 @@ function NewFactForm({ setFacts, setShowForm }) {
     </form>
   )
 }
+
+
 
 export default App;

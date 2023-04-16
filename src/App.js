@@ -72,7 +72,7 @@ function FactList({ facts, setFacts }) {
           <Fact key={fact.id} fact={fact} setFacts={setFacts} />
         ))}
       </ul>
-      <p>There are {facts.length} facts in the database. Add your own!</p>
+      <p>There are {facts.length} facts in the database. Add your own!✌️</p>
     </section>
   )
 }
@@ -100,7 +100,7 @@ function Fact({ fact, setFacts }) {
         {isDisputed ? <span className='disputed'>[⛔️ DISPUTED]</span> : null}
         {fact.Contains}
 
-        <a className='source' href={fact.source} target='_blank'>
+        <a className='source' href={fact.source} rel="noreferrer" target='_blank'>
           (Source)
         </a>
       </p>
@@ -144,9 +144,9 @@ function Header({ showForm, setShowForm }) {
         src="logo.png"
         height="68"
         width="68"
-        alt="Today I Learned Logo"
+        alt="short-fact logo"
       />
-      <h1>Today I Learned</h1>
+      <h1>short fact</h1>
     </div>
 
     <button className="btn btn-large" onClick={() => setShowForm((show) => !show)}>{showForm ? 'close' : 'share a fact'}</button>
@@ -185,7 +185,7 @@ function isValidHttpUrl(string) {
   return url.protocol === 'http:' || url.protocol === 'https:';
 }
 
-function NewFactForm(setFacts, setShowForm) {
+function NewFactForm({ setFacts, setShowForm }) {
   const [text, setText] = useState('');
   const [source, setSource] = useState('');
   const [category, setCategory] = useState('');
@@ -194,7 +194,7 @@ function NewFactForm(setFacts, setShowForm) {
 
   async function handleSubmit(k) {
     k.preventDefault();
-    console.log(text, source, category);
+
     if (text && isValidHttpUrl(source) && category && textL <= 200) {
       setIsUploading(true);
       const { data: newFact, error } = await supabase
@@ -226,7 +226,7 @@ function NewFactForm(setFacts, setShowForm) {
       />
       <span>{200 - textL}</span>
       <input type="text"
-        placeholder="Trustworthy source..."
+        placeholder="https://exmaple.com/"
         value={source}
         onChange={(t) => setSource(t.target.value)}
         disabled={isUploading}

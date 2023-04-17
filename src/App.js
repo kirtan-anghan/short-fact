@@ -137,7 +137,7 @@ function Loader() {
 }
 
 function Header({ showForm, setShowForm }) {
-  return (<header className="header" >
+  return (<header className="header fixed" >
     <div className="logo">
       <img
         src="logo.png"
@@ -155,7 +155,7 @@ function Header({ showForm, setShowForm }) {
 function CategoryFilter({ setCurrentCategory }) {
   return (
     <aside >
-      <ul>
+      <ul className='fix' > 
         <li className="category">
           <button className="btn btn-all-categories " onClick={() => setCurrentCategory('all')}>All</button>
         </li>

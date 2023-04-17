@@ -4,7 +4,7 @@
 
 you can run this project by ✌️:
 
-###  clone this repo <br/>
+###  `clone this repo` <br/>
 ### `npm start`
 
 Runs the app in the development mode.\

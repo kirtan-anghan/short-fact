@@ -55,7 +55,7 @@ body {
   max-width: 1500px;
   margin: 0 auto;
 }
-/* phone css */
+/* css for mobile */
 @media (max-width: 900px) {
   aside{
     display: none !important;
@@ -76,6 +76,9 @@ body {
   }
   .btn1{
     padding: 16px 10px 13px 10px !important;
+  }
+  .fixed{
+    position: relative !important;
   }
 }
 

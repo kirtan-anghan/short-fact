@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import './style.css';
 import supabase from './supabase';
+import Sidebar from './sidebar';
 
 
 const CATEGORIES = [
@@ -48,7 +49,12 @@ function App() {
       {showForm ? <NewFactForm setFacts={setFacts} setShowForm={setShowForm} /> : null}
 
       <main className='main'>
+        
         <CategoryFilter setCurrentCategory={setCurrentCategory}  />
+        {/* <Sidebar pageWrapId={'page-wrap'} outerContainerId={'outer-container'} /> */}
+
+        
+
         {isLoading ? (<Loader />) :
           (<FactList facts={facts} setFacts={setFacts}  />)}
       </main>
@@ -132,6 +138,7 @@ function Fact({ fact, setFacts }) {
     </li>
   );
 }
+
 function Loader() {
   return <p className="message">Loading...</p>;
 }
@@ -139,16 +146,16 @@ function Loader() {
 function Header({ showForm, setShowForm }) {
   return (<header className="header fixed" >
     <div className="logo">
-      <img
+      <img 
         src="logo.png"
         height="68"
         width="68"
         alt="short-fact logo"
       />
-      <h1>short fact</h1>
+      <h1 className='font1'>short fact</h1>
     </div>
 
-    <button className="btn btn-large" onClick={() => setShowForm((show) => !show)}>{showForm ? 'close' : 'share a fact'}</button>
+    <button className="btn btn-large font2 btn1" onClick={() => setShowForm((show) => !show)}>{showForm ? 'close' : 'share a fact'}</button>
   </header>);
 }
 
@@ -242,6 +249,8 @@ function NewFactForm({ setFacts, setShowForm }) {
     </form>
   )
 }
+
+
 
 
 
